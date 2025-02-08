@@ -28,13 +28,30 @@ public class JDBCUtil {
         conn =DriverManager.getConnection(url,DB_USERName,DB_PASSWORD);
         return conn;
     }
+    public static Connection getConnections() throws SQLException{
+        Connection c =null;
+        DriverManager.registerDriver(new com.microsoft.sqlserver.jdbc.SQLServerDriver());
+        String DB_Name="FPTU_Library_Management";
+        String DB_USERNAME="sa";
+        String DB_PASSWORD="12345";
+        String url = "jdbc:sqlserver://localhost:1433; database = "+ DB_Name;
+        c = DriverManager.getConnection(url, DB_USERNAME, DB_PASSWORD);
+        return c;
+    }
+    public static void closeConnection(Connection c){
+        try {
+            if(c!=null)
+            c.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(JDBCUtil.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
     public static void main(String[] args) {
         try {
-            Connection c = getConnection();
-            System.out.println(c);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(JDBCUtil.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
+            Connection c = getConnections();
+            System.out.println(c); 
+        }catch (SQLException ex) {
             Logger.getLogger(JDBCUtil.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
